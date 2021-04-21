@@ -1,8 +1,11 @@
 import 'package:DevQuiz/challenge/widgets/quiz/quiz_widget.dart';
+import 'package:DevQuiz/core/app_colors.dart';
 import 'package:DevQuiz/home/home_controller.dart';
 import 'package:DevQuiz/home/widgets/appbar/app_bar_widget.dart';
+import 'package:DevQuiz/home/home_state.dart';
 import 'package:DevQuiz/home/widgets/levelButton/level_button_widget.dart';
 import 'package:DevQuiz/home/widgets/quiz_card/quiz_card_widget.dart';
+import 'package:DevQuiz/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,10 +23,18 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     homeController.getUser();
     homeController.getQuizzes();
+    homeController.stateNotifier.addListener(() {
+      //saber quando state se modificar
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (homeController.state != HomeState.sucess) {
+      return SplashPage();
+    }
+
     return Scaffold(
       appBar: AppBarWidget(user: homeController.user!),
       body: Padding(

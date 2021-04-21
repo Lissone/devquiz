@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 
 class AppBarWidget extends PreferredSize {
   final UserModel user;
+
   AppBarWidget({required this.user})
       : super(
           preferredSize: Size.fromHeight(250),
