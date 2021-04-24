@@ -1,14 +1,19 @@
+import 'dart:developer';
+
 import 'package:DevQuiz/challenge/challenge_controller.dart';
 import 'package:DevQuiz/challenge/widgets/next_button/next_button_widget.dart';
 import 'package:DevQuiz/challenge/widgets/question_indicator/question_indicator_widget.dart';
 import 'package:DevQuiz/challenge/widgets/quiz/quiz_widget.dart';
+import 'package:DevQuiz/result/result_page.dart';
 import 'package:DevQuiz/shared/models/question_model.dart';
 import 'package:flutter/material.dart';
 
 class ChallengePage extends StatefulWidget {
   final List<QuestionModel> questions;
+  final String title;
 
-  const ChallengePage({Key? key, required this.questions}) : super(key: key);
+  const ChallengePage({Key? key, required this.questions, required this.title})
+      : super(key: key);
 
   @override
   _ChallengePageState createState() => _ChallengePageState();
@@ -17,7 +22,6 @@ class ChallengePage extends StatefulWidget {
 class _ChallengePageState extends State<ChallengePage> {
   final challengeController = ChallengeController();
   final pageController = PageController();
-  bool awnserSelected = false;
 
   @override
   void initState() {
@@ -28,8 +32,16 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 
   void nextPage() {
-    pageController.nextPage(
-        duration: Duration(milliseconds: 300), curve: Curves.linear);
+    if (challengeController.currentPage < widget.questions.length)
+      pageController.nextPage(
+          duration: Duration(milliseconds: 300), curve: Curves.linear);
+  }
+
+  void onSelected(bool value) {
+    if (value) {
+      challengeController.qtdAwnserRight++;
+    }
+    nextPage();
   }
 
   @override
@@ -52,38 +64,41 @@ class _ChallengePageState extends State<ChallengePage> {
           children: widget.questions
               .map((e) => QuizWidget(
                     question: e,
-                    onChange: () {
-                      awnserSelected = true;
-                    },
+                    onSelected: onSelected,
                   ))
               .toList()),
       bottomNavigationBar: SafeArea(
         bottom: true,
         child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                  child: NextButtonWidget.white(
-                label: 'Pular',
-                onTap: nextPage,
-              )),
-              SizedBox(
-                width: 7,
+            padding: const EdgeInsets.all(20),
+            child: ValueListenableBuilder<int>(
+              valueListenable: challengeController.currentPageNotifier,
+              builder: (context, value, _) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (value < widget.questions.length)
+                    Expanded(
+                        child: NextButtonWidget.white(
+                      label: 'Pular',
+                      onTap: nextPage,
+                    )),
+                  if (value == widget.questions.length)
+                    Expanded(
+                        child: NextButtonWidget.green(
+                            label: 'Confirmar',
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ResultPage(
+                                          title: widget.title,
+                                          length: widget.questions.length,
+                                          result: challengeController
+                                              .qtdAwnserRight)));
+                            }))
+                ],
               ),
-              Expanded(
-                  child: NextButtonWidget.green(
-                      label: 'Confirmar',
-                      onTap: () {
-                        if (awnserSelected) {
-                          nextPage();
-                          awnserSelected = false;
-                        }
-                      }))
-            ],
-          ),
-        ),
+            )),
       ),
     );
   }
