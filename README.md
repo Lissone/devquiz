@@ -16,7 +16,7 @@
 
 **Página da questão**
 
-![Question](https://i.imgur.com/B0p0pVM.png)
+![Question](https://i.imgur.com/jgIYU2H.png)
 
 **Resultado do questionário selecionado**
 
