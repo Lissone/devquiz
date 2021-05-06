@@ -12,7 +12,7 @@
 
 | Tela Inicial | Página da questão | Resultado do questionário selecionado |
 |----------|----------|----------|
-| [Home](https://i.imgur.com/B0p0pVM.png) |  [Question](https://i.imgur.com/jgIYU2H.png) | [Congratulations](https://i.imgur.com/95WSB9Z.png) |
+| ![Home](https://i.imgur.com/B0p0pVM.png) |  ![Question](https://i.imgur.com/jgIYU2H.png) | ![Congratulations](https://i.imgur.com/95WSB9Z.png) |
 
 ## Descrição
 Projeto da 5ª edição da semana Next Level Week (NLW), ministrada pelo Gabul Dev, nos dias 19 a 25 de abril de 2021.
